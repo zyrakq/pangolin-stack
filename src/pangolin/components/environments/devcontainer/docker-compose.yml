@@ -1,0 +1,8 @@
+services:
+  pangolin:
+    networks:
+      - pangolin-workspace-network
+
+networks:
+  pangolin-workspace-network:
+    external: true

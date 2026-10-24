@@ -1,0 +1,30 @@
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "${LOG_MAX_SIZE:-10m}"
+    max-file: "${LOG_MAX_FILE:-3}"
+    compress: "${LOG_COMPRESS:-true}"
+
+services:
+  pangolin:
+    container_name: pangolin
+    image: fosrl/pangolin:latest
+    restart: unless-stopped
+    logging: *default-logging
+    volumes:
+      - pangolin-data:/app/config
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
+      interval: "3s"
+      timeout: "3s"
+      retries: 15
+    networks:
+      - pangolin-network
+
+networks:
+  pangolin-network:
+    name: pangolin-network
+
+volumes:
+  pangolin-data:
+    name: pangolin-data
